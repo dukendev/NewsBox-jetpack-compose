@@ -1,16 +1,13 @@
 package com.ysanjeet535.newsbox.ui.view.home
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,18 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.ysanjeet535.newsbox.data.model.NewsItem
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
@@ -40,10 +32,13 @@ import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 @Composable
 fun HomeScreenContent(paddingValues: Dp){
     val newsItem = NewsItem.mock()
+    val scrollState = rememberScrollState()
+
     Column(modifier = Modifier
         .padding(bottom = paddingValues)
         .fillMaxSize()
-        .background(Color.White),
+        .background(Color.White)
+        .verticalScroll(scrollState,enabled = true),
     ) {
         WelcomeText(
             username = "Barney",
@@ -52,7 +47,11 @@ fun HomeScreenContent(paddingValues: Dp){
         HeadingText(heading = "Top Headlines",Modifier.padding(16.dp))
         NewsItemCard(newsItem)
         HeadingText(heading = "Topics",Modifier.padding(16.dp))
-        TopicGrid()
+        //TopicGrid() //adding topic row instead to make this column vertical scroll possible
+        TopicRow()
+        TopicRow()
+        TopicRow()
+        TopicRow()
     }
 }
 
@@ -83,19 +82,32 @@ fun TopicGrid(){
     LazyVerticalGrid(
         cells = GridCells.Fixed(3) ){
         items(topic.size){
-            item->
-            TopicCardItem(topic = topic[item])
+            itemIndex->
+            TopicCardItem(topic = topic[itemIndex])
         }
     }
 }
 
-
+@Preview
 @Composable
-fun TopicCardItem(topic : String){
+fun TopicRow(){
+    val topic = listOf("Sports","Entertainment","Politics","Economy","Bollywood","Crypto","Movies")
+    LazyRow(modifier = Modifier.height(100.dp)){
+        items(topic.size){
+            itemIndex->
+            TopicCardItem(topic = topic[itemIndex],aspectRatio = 2f)
+        }
+    }
+
+}
+
+@Preview
+@Composable
+fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
     BoxWithConstraints (
         modifier = Modifier
             .padding(8.dp)
-            .aspectRatio(1f)
+            .aspectRatio(aspectRatio)
             .clip(RoundedCornerShape(10.dp))
             .background(RedBoxDark)
             ) {
@@ -109,7 +121,7 @@ fun TopicCardItem(topic : String){
         val mediumShapePoint4 = Offset(width.times(0.7f),height.times(075f))
         val mediumShapePoint5 = Offset(width.times(1.5f),-height.toFloat())
 
-        val mediuamPath = Path().apply {
+        val mediumPath = Path().apply {
             moveTo(mediumShapePoint1.x,mediumShapePoint1.y)
             quadraticBezierTo(
                 (mediumShapePoint1.x+mediumShapePoint2.x).times(0.5f),
@@ -140,7 +152,7 @@ fun TopicCardItem(topic : String){
             close()
         }
         Canvas(modifier = Modifier.fillMaxSize() ){
-            drawPath(mediuamPath, RedBoxMedium)
+            drawPath(mediumPath, RedBoxMedium)
         }
         
         Box(modifier = Modifier.fillMaxSize()){
