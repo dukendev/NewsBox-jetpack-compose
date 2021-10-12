@@ -1,5 +1,6 @@
 package com.ysanjeet535.newsbox.ui.navigation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
@@ -12,6 +13,7 @@ import com.ysanjeet535.newsbox.ui.view.explore.ExploreScreenContent
 import com.ysanjeet535.newsbox.ui.view.home.HomeScreenContent
 import com.ysanjeet535.newsbox.ui.view.profile.ProfileScreenContent
 
+@ExperimentalFoundationApi
 @Composable
 fun NavigationComponent(navController: NavController,paddingValues: Dp
 ){
