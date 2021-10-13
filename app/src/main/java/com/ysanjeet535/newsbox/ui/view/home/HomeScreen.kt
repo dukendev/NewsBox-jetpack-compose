@@ -6,13 +6,9 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,9 +34,8 @@ import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
-    val newsItem = NewsItem.mock()
-    val scrollState = rememberScrollState()
 
+    val scrollState = rememberScrollState()
     val templist by mainViewModel.newsResponse.observeAsState()
     val articles = templist?.articles
     Column(modifier = Modifier
@@ -54,6 +49,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
             Modifier.padding(16.dp)
         )
         HeadingText(heading = "Top Headlines",Modifier.padding(16.dp))
+        CountryCodeDropDown(mainViewModel)
         articles?.let {
             articlesList->
             LazyRow{
@@ -133,40 +129,31 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
         val mediumShapePoint2 = Offset(width.times(0.1f),height.times(0.35f))
         val mediumShapePoint3 = Offset(width.times(0.4f),height.times(0.05f))
         val mediumShapePoint4 = Offset(width.times(0.7f),height.times(075f))
-        val mediumShapePoint5 = Offset(width.times(1.5f),-height.toFloat())
+        val mediumShapePoint5 = Offset(width.times(0.9f),height.times(0.5f))
 
         val mediumPath = Path().apply {
             moveTo(mediumShapePoint1.x,mediumShapePoint1.y)
             quadraticBezierTo(
-                (mediumShapePoint1.x+mediumShapePoint2.x).times(0.5f),
-                (mediumShapePoint1.y+mediumShapePoint2.y).times(0.5f),
-                mediumShapePoint2.x,
-                mediumShapePoint2.y,
+                mediumShapePoint2.x,mediumShapePoint2.y,
+                mediumShapePoint3.x,mediumShapePoint3.y
+
             )
             quadraticBezierTo(
-                (mediumShapePoint2.x+mediumShapePoint3.x).times(0.5f),
-                (mediumShapePoint2.y+mediumShapePoint3.y).times(0.5f),
-                mediumShapePoint3.x,
-                mediumShapePoint3.y,
+                mediumShapePoint3.x,mediumShapePoint3.y,
+                mediumShapePoint4.x,mediumShapePoint4.y
             )
             quadraticBezierTo(
-                (mediumShapePoint3.x+mediumShapePoint4.x).times(0.5f),
-                (mediumShapePoint3.y+mediumShapePoint4.y).times(0.5f),
-                mediumShapePoint4.x,
-                mediumShapePoint4.y,
+               mediumShapePoint4.x,mediumShapePoint4.y,
+                mediumShapePoint5.x,mediumShapePoint5.y
             )
-            quadraticBezierTo(
-                (mediumShapePoint4.x+mediumShapePoint5.x).times(0.5f),
-                (mediumShapePoint4.y+mediumShapePoint5.y).times(0.5f),
-                mediumShapePoint5.x,
-                mediumShapePoint5.y,
-            )
-            lineTo(width.toFloat()+100f,height.toFloat()+100f)
-            lineTo(-100f,height.toFloat()+100f)
+
+            lineTo(width.toFloat(),height.toFloat())
+            lineTo(-0f,height.toFloat())
             close()
         }
         Canvas(modifier = Modifier.fillMaxSize() ){
             drawPath(mediumPath, RedBoxMedium)
+            drawCircle(color = RedBoxMedium,radius = 5f,center = this.center)
         }
         
         Box(modifier = Modifier.fillMaxSize()){
@@ -178,8 +165,6 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
                 )
             )
         }
-
-
 
     }
 }
@@ -255,6 +240,49 @@ fun NewsItemCard(newsItem: Article){
 
         }
     }
+}
+
+
+
+@Composable
+fun CountryCodeDropDown(mainViewModel: MainViewModel){
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("us","ca","in","ru")
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth()
+        .wrapContentSize(Alignment.TopStart)
+        .background(Color.LightGray)
+    ){
+        Text(
+            text = items[selectedIndex],
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { expanded = true })
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(
+                    onClick = {
+                        selectedIndex = index
+                        expanded = false
+                        mainViewModel.updateCountryCode(s)
+                        mainViewModel.getTopheadlines()
+                    }
+                ){
+                    Text(text = s)
+                }
+            }
+        }
+        
+    }
+
 }
 
 //@Preview

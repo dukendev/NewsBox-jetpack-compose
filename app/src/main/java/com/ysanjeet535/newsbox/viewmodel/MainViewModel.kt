@@ -1,5 +1,6 @@
 package com.ysanjeet535.newsbox.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,10 +18,21 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
 
     val newsResponse : LiveData<NewsResponse> get() = repository.newsResponseLiveData
 
+    private var countryCode : String = "us"
+
     init {
+        getTopheadlines()
+    }
+
+    fun getTopheadlines(){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getTopHeadlines("in", API_KEY)
+            repository.getTopHeadlines(countryCode, API_KEY)
         }
+    }
+
+    fun updateCountryCode(code:String){
+        countryCode = code
+        Log.d("VIEWMODEL",countryCode)
     }
 
 }
