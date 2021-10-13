@@ -16,7 +16,7 @@ class NewsArticleRepository @Inject constructor (private val newsApi : NewsApi) 
 
     suspend fun getTopHeadlines(country:String,apiKey :String) {
 
-            val result = newsApi.getTopheadlines("us",API_KEY)
+            val result = newsApi.getTopheadlines(country,apiKey)
             if(result?.body()!=null){
                 _newsResponseLiveData.postValue(result.body()!!)
             }

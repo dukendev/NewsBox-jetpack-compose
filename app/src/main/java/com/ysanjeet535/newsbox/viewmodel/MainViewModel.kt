@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getTopHeadlines("us", API_KEY)
+            repository.getTopHeadlines("in", API_KEY)
         }
     }
 

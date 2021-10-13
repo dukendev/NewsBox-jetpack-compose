@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,12 +63,8 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
             }
         }
 
-
         HeadingText(heading = "Topics",Modifier.padding(16.dp))
         //TopicGrid() //adding topic row instead to make this column vertical scroll possible
-        TopicRow()
-        TopicRow()
-        TopicRow()
         TopicRow()
     }
 }
@@ -198,7 +195,8 @@ fun NewsItemCard(newsItem: Article){
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
+            .width(300.dp)
+            .height(500.dp)
             .clip(
                 RoundedCornerShape(
                     topEnd = 25.dp,
@@ -220,7 +218,10 @@ fun NewsItemCard(newsItem: Article){
                     .padding(16.dp)
                     .height(200.dp)
                     .fillMaxWidth()
+                ,
+                contentScale = ContentScale.Crop
             )
+
             Text(
                 text = newsItem.title,
                 modifier = Modifier.padding(8.dp),
