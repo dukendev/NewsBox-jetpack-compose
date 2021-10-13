@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -183,8 +184,10 @@ fun TopicCardPreview(){
 @Composable
 fun NewsItemCard(newsItem: Article){
     //for web url
-    val context = LocalContext.current
-    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
+//    val context = LocalContext.current
+//    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
+    //this uri handler method is simpler than using traditional intents
+    val uriHandler = LocalUriHandler.current
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -198,7 +201,7 @@ fun NewsItemCard(newsItem: Article){
                     bottomEnd = 0.dp
                 )
             )
-            .clickable { context.startActivity(webIntent) },
+            .clickable { uriHandler.openUri(newsItem.url) },
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.background
     ) {
