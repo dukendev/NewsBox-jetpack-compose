@@ -1,11 +1,14 @@
 package com.ysanjeet535.newsbox.di
 
+import android.content.Context
+import com.ysanjeet535.newsbox.App
 import com.ysanjeet535.newsbox.data.remote.NewsApi
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
 import com.ysanjeet535.newsbox.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,5 +32,11 @@ object AppModule {
     @Provides
     fun provideRepository(newsApi: NewsApi) : NewsArticleRepository{
         return NewsArticleRepository(newsApi = newsApi)
+    }
+
+    @Singleton
+    @Provides
+    fun provideApplication(@ApplicationContext context: Context) : App {
+        return context as App
     }
 }

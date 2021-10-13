@@ -1,5 +1,8 @@
 package com.ysanjeet535.newsbox.ui.view.home
 
+
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -16,6 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,12 +27,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ysanjeet535.newsbox.R
-import com.ysanjeet535.newsbox.data.model.NewsItem
 import com.ysanjeet535.newsbox.data.remote.dto.Article
-import com.ysanjeet535.newsbox.data.remote.dto.Article.Companion.mapToNewsItem
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
+
 
 
 @ExperimentalFoundationApi
@@ -38,6 +41,8 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
     val scrollState = rememberScrollState()
     val templist by mainViewModel.newsResponse.observeAsState()
     val articles = templist?.articles
+
+
     Column(modifier = Modifier
         .padding(bottom = paddingValues)
         .fillMaxSize()
@@ -177,6 +182,9 @@ fun TopicCardPreview(){
 
 @Composable
 fun NewsItemCard(newsItem: Article){
+    //for web url
+    val context = LocalContext.current
+    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -189,7 +197,8 @@ fun NewsItemCard(newsItem: Article){
                     topStart = 0.dp,
                     bottomEnd = 0.dp
                 )
-            ),
+            )
+            .clickable { context.startActivity(webIntent) },
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.background
     ) {
@@ -247,20 +256,24 @@ fun NewsItemCard(newsItem: Article){
 @Composable
 fun CountryCodeDropDown(mainViewModel: MainViewModel){
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("us","ca","in","ru")
+    val items = listOf("us","ca","in","ru","fr")
     var selectedIndex by remember { mutableStateOf(0) }
 
     Box(modifier = Modifier
         .padding(8.dp)
         .fillMaxWidth()
+        .clip(RoundedCornerShape(10.dp))
         .wrapContentSize(Alignment.TopStart)
         .background(Color.LightGray)
+
     ){
         Text(
             text = items[selectedIndex],
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth()
                 .clickable(onClick = { expanded = true })
+
         )
         DropdownMenu(
             expanded = expanded,
@@ -285,8 +298,9 @@ fun CountryCodeDropDown(mainViewModel: MainViewModel){
 
 }
 
-//@Preview
-//@Composable
-//fun NewsCardPreview(){
-//    NewsItemCard(newsItem = NewsItem.mock())
-//}
+
+
+
+
+
+
