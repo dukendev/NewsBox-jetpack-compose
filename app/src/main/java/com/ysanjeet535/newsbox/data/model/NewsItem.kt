@@ -1,5 +1,7 @@
 package com.ysanjeet535.newsbox.data.model
 
+import com.ysanjeet535.newsbox.data.remote.dto.Article
+
 data class NewsItem(
     val author: String,
     val content: String,
@@ -24,5 +26,7 @@ data class NewsItem(
             )
         }
     }
+
+
 
 }

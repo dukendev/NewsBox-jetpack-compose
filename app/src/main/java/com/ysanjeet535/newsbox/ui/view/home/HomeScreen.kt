@@ -10,6 +10,8 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,29 +25,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.ysanjeet535.newsbox.R
 import com.ysanjeet535.newsbox.data.model.NewsItem
+import com.ysanjeet535.newsbox.data.remote.dto.Article
+import com.ysanjeet535.newsbox.data.remote.dto.Article.Companion.mapToNewsItem
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
+import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 
 
 @ExperimentalFoundationApi
 @Composable
-fun HomeScreenContent(paddingValues: Dp){
+fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
     val newsItem = NewsItem.mock()
     val scrollState = rememberScrollState()
 
+    val templist by mainViewModel.newsResponse.observeAsState()
+    val articles = templist?.articles
     Column(modifier = Modifier
         .padding(bottom = paddingValues)
         .fillMaxSize()
         .background(Color.White)
-        .verticalScroll(scrollState,enabled = true),
+        .verticalScroll(scrollState, enabled = true),
     ) {
         WelcomeText(
             username = "Barney",
             Modifier.padding(16.dp)
         )
         HeadingText(heading = "Top Headlines",Modifier.padding(16.dp))
-        NewsItemCard(newsItem)
+        articles?.let {
+            articlesList->
+            LazyRow{
+                items(articlesList.size){
+                    NewsItemCard(newsItem = articlesList[it])
+                }
+            }
+        }
+
+
         HeadingText(heading = "Topics",Modifier.padding(16.dp))
         //TopicGrid() //adding topic row instead to make this column vertical scroll possible
         TopicRow()
@@ -177,7 +194,7 @@ fun TopicCardPreview(){
 }
 
 @Composable
-fun NewsItemCard(newsItem: NewsItem){
+fun NewsItemCard(newsItem: Article){
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -195,7 +212,9 @@ fun NewsItemCard(newsItem: NewsItem){
     ) {
         Column {
             Image(
-                painter = rememberImagePainter(data = newsItem.urlToImage),
+                painter = rememberImagePainter(data = newsItem.urlToImage){
+                      error(R.drawable.ic_launcher_background)
+                },
                 contentDescription = null,
                 modifier = Modifier
                     .padding(16.dp)
@@ -237,8 +256,8 @@ fun NewsItemCard(newsItem: NewsItem){
     }
 }
 
-@Preview
-@Composable
-fun NewsCardPreview(){
-    NewsItemCard(newsItem = NewsItem.mock())
-}
+//@Preview
+//@Composable
+//fun NewsCardPreview(){
+//    NewsItemCard(newsItem = NewsItem.mock())
+//}
