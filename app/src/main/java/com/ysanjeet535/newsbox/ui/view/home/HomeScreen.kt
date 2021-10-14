@@ -7,9 +7,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -23,8 +21,10 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,7 +36,7 @@ import com.ysanjeet535.newsbox.ui.theme.GreenBoxMedium
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
-
+import java.util.*
 
 
 @ExperimentalFoundationApi
@@ -71,7 +71,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 
         HeadingText(heading = "Topics",Modifier.padding(16.dp))
         //TopicGrid() //adding topic row instead to make this column vertical scroll possible
-        TopicRow()
+        TopicRow(mainViewModel)
     }
 }
 
@@ -95,103 +95,140 @@ fun HeadingText(heading : String,modifier: Modifier = Modifier){
     )
 }
 
-@ExperimentalFoundationApi
-@Composable
-fun TopicGrid(){
-    val topic = listOf("Sports","Entertainment","Politics","Economy","Bollywood","Crypto","Movies")
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(3) ){
-        items(topic.size){
-            itemIndex->
-            TopicCardItem(topic = topic[itemIndex],isTopicSelected = true,onTopicSelected = {})
-        }
-    }
-}
+//@ExperimentalFoundationApi
+//@Composable
+//fun TopicGrid(){
+//    val topic = listOf("Sports","Entertainment","Politics","Economy","Bollywood","Crypto","Movies")
+//    LazyVerticalGrid(
+//        cells = GridCells.Fixed(3) ){
+//        items(topic.size){
+//            itemIndex->
+//            TopicCardItem(topic = topic[itemIndex],isTopicSelected = true,onTopicSelected = {})
+//        }
+//    }
+//}
 
-@Preview
+
 @Composable
-fun TopicRow(){
-    val topic = listOf("Sports","Entertainment","Politics","Economy","Bollywood","Crypto","Movies")
+fun TopicRow(mainViewModel: MainViewModel){
+    val topic = listOf("business","entertainment","general","health","science","sports","technology")
     var topicIndexSelected by remember { mutableStateOf(0)}
 
-    LazyRow(modifier = Modifier.height(100.dp)){
-        items(topic.size){
-            itemIndex->
-            var isTopicSelected = topicIndexSelected == itemIndex
-            TopicCardItem(
-                topic = topic[itemIndex],
-                aspectRatio = 2f,
-                isTopicSelected = isTopicSelected,
-                onTopicSelected = { topicIndexSelected = itemIndex }
-            )
+
+    Column {
+
+
+        LazyRow(modifier = Modifier.height(100.dp)) {
+            items(topic.size) { itemIndex ->
+                var isTopicSelected = topicIndexSelected == itemIndex
+                TopicCardItem(
+                    topic = topic[itemIndex].replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    },
+                    aspectRatio = 2f,
+                    isTopicSelected = isTopicSelected,
+                    mainViewModel = mainViewModel,
+                    onTopicSelected = { topicIndexSelected = itemIndex }
+                )
+            }
+        }
+
+
+        val topicHeadlines = mainViewModel.newsResponseTopic.observeAsState()
+        topicHeadlines.value.let {
+            LazyRow {
+                topicHeadlines.value?.articles?.size?.let { it1 ->
+                    items(it1) {
+                        NewsItemCard(newsItem = topicHeadlines.value!!.articles[it])
+                    }
+                }
+
+            }
         }
     }
+
+
+
+
+        
+
+
+    
 
 }
 
 @Composable
-fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelected : Boolean, onTopicSelected :()-> Unit){
+fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelected : Boolean, mainViewModel: MainViewModel,onTopicSelected :()-> Unit){
 
     val colorMedium by animateColorAsState(if(isTopicSelected) RedBoxMedium else GreenBoxMedium,animationSpec = tween(1500))
     val colorDark by animateColorAsState(if (isTopicSelected) RedBoxDark else GreenBoxDark,animationSpec = tween(1500))
-    BoxWithConstraints (
-        modifier = Modifier
-            .padding(8.dp)
-            .aspectRatio(aspectRatio)
-            .clip(RoundedCornerShape(10.dp))
-            .background(colorDark)
-            .clickable { onTopicSelected() }
-            ) {
-        val width =  constraints.maxWidth
-        val height = constraints.maxHeight
 
-        //path points for medium shape path curve
-        val mediumShapePoint1 = Offset(width.times(0.0f),height.times(0.3f))
-        val mediumShapePoint2 = Offset(width.times(0.1f),height.times(0.35f))
-        val mediumShapePoint3 = Offset(width.times(0.4f),height.times(0.05f))
-        val mediumShapePoint4 = Offset(width.times(0.7f),height.times(075f))
-        val mediumShapePoint5 = Offset(width.times(0.9f),height.times(0.5f))
 
-        val mediumPath = Path().apply {
-            moveTo(mediumShapePoint1.x,mediumShapePoint1.y)
-            quadraticBezierTo(
-                mediumShapePoint2.x,mediumShapePoint2.y,
-                mediumShapePoint3.x,mediumShapePoint3.y
+        BoxWithConstraints(
+            modifier = Modifier
+                .padding(8.dp)
+                .aspectRatio(aspectRatio)
+                .clip(RoundedCornerShape(10.dp))
+                .background(colorDark)
+                .clickable {
+                    onTopicSelected()
+                    mainViewModel.updateCategory(topic)
+                    mainViewModel.getTopheadlinesOfTopic()
+                }
+        ) {
+            val width = constraints.maxWidth
+            val height = constraints.maxHeight
 
-            )
-            quadraticBezierTo(
-                mediumShapePoint3.x,mediumShapePoint3.y,
-                mediumShapePoint4.x,mediumShapePoint4.y
-            )
-            quadraticBezierTo(
-               mediumShapePoint4.x,mediumShapePoint4.y,
-                mediumShapePoint5.x,mediumShapePoint5.y
-            )
+            //path points for medium shape path curve
+            val mediumShapePoint1 = Offset(width.times(0.0f), height.times(0.3f))
+            val mediumShapePoint2 = Offset(width.times(0.1f), height.times(0.35f))
+            val mediumShapePoint3 = Offset(width.times(0.4f), height.times(0.05f))
+            val mediumShapePoint4 = Offset(width.times(0.7f), height.times(075f))
+            val mediumShapePoint5 = Offset(width.times(0.9f), height.times(0.5f))
 
-            lineTo(width.toFloat(),height.toFloat())
-            lineTo(-0f,height.toFloat())
-            close()
-        }
-        Canvas(modifier = Modifier.fillMaxSize() ){
-            drawPath(mediumPath, colorMedium)
-            drawCircle(
-                color = colorMedium,
-                radius = 5f,
-                center = Offset(width.toFloat().times(0.5f), height.toFloat().times(0.5f))
-            )
-        }
-        
-        Box(modifier = Modifier.fillMaxSize()){
-            Text(
-                text = topic,
-                style = MaterialTheme.typography.h2,
-                modifier = Modifier.align(
-                    Alignment.Center
+            val mediumPath = Path().apply {
+                moveTo(mediumShapePoint1.x, mediumShapePoint1.y)
+                quadraticBezierTo(
+                    mediumShapePoint2.x, mediumShapePoint2.y,
+                    mediumShapePoint3.x, mediumShapePoint3.y
+
                 )
-            )
+                quadraticBezierTo(
+                    mediumShapePoint3.x, mediumShapePoint3.y,
+                    mediumShapePoint4.x, mediumShapePoint4.y
+                )
+                quadraticBezierTo(
+                    mediumShapePoint4.x, mediumShapePoint4.y,
+                    mediumShapePoint5.x, mediumShapePoint5.y
+                )
+
+                lineTo(width.toFloat(), height.toFloat())
+                lineTo(-0f, height.toFloat())
+                close()
+            }
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawPath(mediumPath, colorMedium)
+                drawCircle(
+                    color = colorMedium,
+                    radius = 5f,
+                    center = Offset(width.toFloat().times(0.5f), height.toFloat().times(0.5f))
+                )
+            }
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = topic,
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.align(
+                        Alignment.Center
+                    )
+                )
+            }
+
         }
 
-    }
 }
 
 

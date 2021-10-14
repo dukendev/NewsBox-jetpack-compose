@@ -14,4 +14,13 @@ interface NewsApi {
         @Query("country") country : String = "us",
         @Query("apiKey") key : String
     ) : Response<NewsResponse>
+
+    @GET("top-headlines")
+    suspend fun getTopheadlinesOfTopic(
+        @Query("country") country : String = "us",
+        @Query("category") category : String = "business",
+        @Query("apiKey") key : String
+    ) : Response<NewsResponse>
+
+
 }

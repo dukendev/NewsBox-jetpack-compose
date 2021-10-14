@@ -17,11 +17,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val repository: NewsArticleRepository) : ViewModel() {
 
     val newsResponse : LiveData<NewsResponse> get() = repository.newsResponseLiveData
+    val newsResponseTopic : LiveData<NewsResponse> get() = repository.newsTopicResponseLiveData
 
     private var countryCode : String = "us"
+    private var category : String = "business"
 
     init {
         getTopheadlines()
+        getTopheadlinesOfTopic()
     }
 
     fun getTopheadlines(){
@@ -30,9 +33,20 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
         }
     }
 
+    fun getTopheadlinesOfTopic(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getTopHeadlinesOfTopic(countryCode,category ,API_KEY)
+        }
+    }
+
     fun updateCountryCode(code:String){
         countryCode = code
         Log.d("VIEWMODEL",countryCode)
+    }
+
+    fun updateCategory(cate:String){
+        category = cate
+        Log.d("VIEWMODEL",category)
     }
 
 }
