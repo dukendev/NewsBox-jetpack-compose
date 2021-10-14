@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ysanjeet535.newsbox.R
 import com.ysanjeet535.newsbox.data.remote.dto.Article
+import com.ysanjeet535.newsbox.ui.theme.GreenBoxDark
+import com.ysanjeet535.newsbox.ui.theme.GreenBoxMedium
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
@@ -99,7 +101,7 @@ fun TopicGrid(){
         cells = GridCells.Fixed(3) ){
         items(topic.size){
             itemIndex->
-            TopicCardItem(topic = topic[itemIndex])
+            TopicCardItem(topic = topic[itemIndex],isTopicSelected = true,onTopicSelected = {})
         }
     }
 }
@@ -108,24 +110,34 @@ fun TopicGrid(){
 @Composable
 fun TopicRow(){
     val topic = listOf("Sports","Entertainment","Politics","Economy","Bollywood","Crypto","Movies")
+    var topicIndexSelected by remember { mutableStateOf(0)}
+
     LazyRow(modifier = Modifier.height(100.dp)){
         items(topic.size){
             itemIndex->
-            TopicCardItem(topic = topic[itemIndex],aspectRatio = 2f)
+            var isTopicSelected = topicIndexSelected == itemIndex
+            TopicCardItem(
+                topic = topic[itemIndex],
+                aspectRatio = 2f,
+                isTopicSelected = isTopicSelected,
+                onTopicSelected = { topicIndexSelected = itemIndex }
+            )
         }
     }
 
 }
 
-@Preview
 @Composable
-fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
+fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelected : Boolean, onTopicSelected :()-> Unit){
+    val colorMedium = if(isTopicSelected) RedBoxMedium else GreenBoxMedium
+    val colorDark = if (isTopicSelected) RedBoxDark else GreenBoxDark
     BoxWithConstraints (
         modifier = Modifier
             .padding(8.dp)
             .aspectRatio(aspectRatio)
             .clip(RoundedCornerShape(10.dp))
-            .background(RedBoxDark)
+            .background(colorDark)
+            .clickable { onTopicSelected() }
             ) {
         val width =  constraints.maxWidth
         val height = constraints.maxHeight
@@ -158,8 +170,12 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
             close()
         }
         Canvas(modifier = Modifier.fillMaxSize() ){
-            drawPath(mediumPath, RedBoxMedium)
-            drawCircle(color = RedBoxMedium,radius = 5f,center = this.center)
+            drawPath(mediumPath, colorMedium)
+            drawCircle(
+                color = colorMedium,
+                radius = 5f,
+                center = Offset(width.toFloat().times(0.5f), height.toFloat().times(0.5f))
+            )
         }
         
         Box(modifier = Modifier.fillMaxSize()){
@@ -175,11 +191,7 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f){
     }
 }
 
-@Preview
-@Composable
-fun TopicCardPreview(){
-    TopicCardItem("Local")
-}
+
 
 @Composable
 fun NewsItemCard(newsItem: Article){
@@ -188,6 +200,7 @@ fun NewsItemCard(newsItem: Article){
 //    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
     //this uri handler method is simpler than using traditional intents
     val uriHandler = LocalUriHandler.current
+
     Card(
         modifier = Modifier
             .padding(16.dp)
