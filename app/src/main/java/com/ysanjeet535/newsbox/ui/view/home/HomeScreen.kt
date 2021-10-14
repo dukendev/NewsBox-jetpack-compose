@@ -271,31 +271,42 @@ fun NewsItemCard(newsItem: Article){
                 ,
                 contentScale = ContentScale.Crop
             )
-
+            val title = if(newsItem.title.isNullOrBlank()) "Not available" else newsItem.title
             Text(
-                text = newsItem.title,
+
+                text = title,
                 modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.h3
             )
+            val description = if(newsItem.description.isNullOrBlank()) "Not available" else newsItem.description
             Text(
-                text = newsItem.description,
+                text = description,
                 modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.body1,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis
             )
+            var sourceName = "Not available"
+            newsItem.source?.let {
+                sourceName = it.name
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = newsItem.source.name,
+                    text = sourceName,
                     modifier = Modifier.padding(8.dp)
                 )
+
                 val date = remember {
-                    newsItem.publishedAt.dropLastWhile { it != 'T' }.dropLast(1)
+                    if(!newsItem.publishedAt.isNullOrEmpty()){
+                        newsItem.publishedAt.dropLastWhile { it != 'T' }.dropLast(1)
+                    } else
+                        "Not available"
                 }
+
                 Text(
                     text = date,
                     modifier = Modifier.padding(8.dp),
