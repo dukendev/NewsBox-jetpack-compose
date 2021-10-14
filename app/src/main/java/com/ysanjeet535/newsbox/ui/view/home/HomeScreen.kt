@@ -3,6 +3,8 @@ package com.ysanjeet535.newsbox.ui.view.home
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -129,8 +131,9 @@ fun TopicRow(){
 
 @Composable
 fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelected : Boolean, onTopicSelected :()-> Unit){
-    val colorMedium = if(isTopicSelected) RedBoxMedium else GreenBoxMedium
-    val colorDark = if (isTopicSelected) RedBoxDark else GreenBoxDark
+
+    val colorMedium by animateColorAsState(if(isTopicSelected) RedBoxMedium else GreenBoxMedium,animationSpec = tween(1500))
+    val colorDark by animateColorAsState(if (isTopicSelected) RedBoxDark else GreenBoxDark,animationSpec = tween(1500))
     BoxWithConstraints (
         modifier = Modifier
             .padding(8.dp)
