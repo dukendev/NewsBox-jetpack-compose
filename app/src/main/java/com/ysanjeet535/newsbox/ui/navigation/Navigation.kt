@@ -31,7 +31,7 @@ fun NavigationComponent(navController: NavController,paddingValues: Dp,mainViewM
         }
 
         composable(Screens.Profile.name){
-            ProfileScreenContent()
+            ProfileScreenContent(paddingValues = paddingValues)
         }
     }
 }
