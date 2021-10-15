@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ysanjeet535.newsbox.ui.navigation.Screens
+import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
+import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 
 @ExperimentalAnimationApi
 @Composable
@@ -47,7 +49,11 @@ fun BottomNavBar(currentScreen : String,navController: NavController ,onScreenSe
                 ) {
                     onScreenSelected(it)
                     if(currentDestination != it.name){
-                        navController.navigate(it.name)
+                        navController.navigate(it.name){
+                            popUpTo(it.name){
+                                inclusive =  true
+                            }
+                        }
                     }
                 }
         }
@@ -60,8 +66,8 @@ fun BottomNavBar(currentScreen : String,navController: NavController ,onScreenSe
 @Composable
 fun BottomNavBarItem(screen : Screens, isSelected : Boolean, onScreenSelected : ()->Unit){
 
-    val background=if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.1f) else Color.Transparent
-    val contentColor=if (isSelected) Color.Black else MaterialTheme.colors.onBackground
+    val background=if (isSelected) RedBoxMedium.copy(alpha = 0.2f) else Color.Transparent
+    val contentColor=if (isSelected) RedBoxDark else MaterialTheme.colors.onBackground
 
     Box(
         modifier = Modifier
