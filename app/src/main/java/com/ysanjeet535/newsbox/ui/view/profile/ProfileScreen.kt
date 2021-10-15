@@ -16,6 +16,5 @@ fun ProfileScreenContent(){
     ShimmerBox(modifier = Modifier
         .fillMaxSize()
         .padding(50.dp))
-
 }
 
