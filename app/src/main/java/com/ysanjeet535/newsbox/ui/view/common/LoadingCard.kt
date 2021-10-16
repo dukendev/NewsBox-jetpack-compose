@@ -83,33 +83,63 @@ fun ShimmerBoxContent(brush: Brush = Brush.linearGradient(listOf(Color.Red,Color
             )
 
             Spacer(modifier = Modifier
-                .padding(8.dp)
-                .height(16.dp)
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                .height(8.dp)
                 .fillMaxWidth()
                 .background(brush)
             )
 
             Spacer(modifier = Modifier
                 .padding(8.dp)
-                .height(16.dp)
-                .fillMaxWidth()
-                .background(brush)
-            )
-
-
-            Spacer(modifier = Modifier
-                .padding(8.dp)
-                .height(16.dp)
+                .height(8.dp)
                 .fillMaxWidth()
                 .background(brush)
             )
 
             Spacer(modifier = Modifier
-                .padding(8.dp)
-                .height(16.dp)
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                .height(8.dp)
                 .fillMaxWidth()
                 .background(brush)
             )
+
+            Spacer(modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                .height(8.dp)
+                .fillMaxWidth()
+                .background(brush)
+            )
+
+            Spacer(modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                .height(8.dp)
+                .fillMaxWidth()
+                .background(brush)
+            )
+
+            Spacer(modifier = Modifier
+                .padding(8.dp)
+                .height(8.dp)
+                .fillMaxWidth()
+                .background(brush)
+            )
+
+
+            Row(modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween) {
+                Spacer(modifier = Modifier
+                    .padding(8.dp)
+                    .height(16.dp)
+                    .width(100.dp)
+                    .background(brush)
+                )
+                Spacer(modifier = Modifier
+                    .padding(8.dp)
+                    .height(16.dp)
+                    .width(100.dp)
+                    .background(brush)
+                )
+            }
+
 
     }
 }
