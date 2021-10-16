@@ -3,6 +3,7 @@ package com.ysanjeet535.newsbox.ui.view.home
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -35,6 +36,8 @@ import com.ysanjeet535.newsbox.ui.theme.GreenBoxDark
 import com.ysanjeet535.newsbox.ui.theme.GreenBoxMedium
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
+import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
+import com.ysanjeet535.newsbox.utils.ResponseHandler
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 import java.util.*
 
@@ -44,8 +47,8 @@ import java.util.*
 fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 
     val scrollState = rememberScrollState()
-    val templist by mainViewModel.newsResponse.observeAsState()
-    val articles = templist?.articles
+    val topHeadlines by mainViewModel.newsResponseLiveData.observeAsState()
+
 
 
     Column(modifier = Modifier
@@ -60,12 +63,20 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
         )
         HeadingText(heading = "Top Headlines",Modifier.padding(16.dp))
         CountryCodeDropDown(mainViewModel)
-        articles?.let {
-            articlesList->
-            LazyRow{
-                items(articlesList.size){
-                    NewsItemCard(newsItem = articlesList[it])
+        when(topHeadlines){
+            is ResponseHandler.Success -> {
+                val articles = topHeadlines?.data!!.articles
+                LazyRow{
+                    items(articles.size){
+                        NewsItemCard(newsItem = articles[it])
+                    }
                 }
+            }
+            is ResponseHandler.Loading -> {
+                LoadingCards()
+            }
+            is ResponseHandler.Error -> {
+                Toast.makeText(LocalContext.current,"${topHeadlines?.message}",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -136,26 +147,27 @@ fun TopicRow(mainViewModel: MainViewModel){
         }
 
 
-        val topicHeadlines = mainViewModel.newsResponseTopic.observeAsState()
-        topicHeadlines.value.let {
-            LazyRow {
-                topicHeadlines.value?.articles?.size?.let { it1 ->
-                    items(it1) {
-                        NewsItemCard(newsItem = topicHeadlines.value!!.articles[it])
+        val topicHeadlines by mainViewModel.newsTopicResponseLiveData.observeAsState()
+
+        when(topicHeadlines){
+            is ResponseHandler.Success -> {
+                val list = topicHeadlines?.data!!.articles
+                LazyRow {
+
+                    items(list.size) {
+                        NewsItemCard(newsItem = list[it])
                     }
                 }
-
+            }
+            is ResponseHandler.Loading -> {
+                LoadingCards()
+            }
+            is ResponseHandler.Error -> {
+                Toast.makeText(LocalContext.current,"${topicHeadlines?.message}",Toast.LENGTH_LONG).show()
             }
         }
+
     }
-
-
-
-
-        
-
-
-    
 
 }
 
