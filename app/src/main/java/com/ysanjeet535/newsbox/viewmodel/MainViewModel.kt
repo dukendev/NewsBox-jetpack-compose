@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
 import com.ysanjeet535.newsbox.utils.Constants.API_KEY
@@ -20,9 +21,11 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
 
     private val _newsResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
     private val _newsTopicResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
+    private val _newsSearchResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
 
     val newsResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsResponseLiveData
     val newsTopicResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsTopicResponseLiveData
+    val newsSearchResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsSearchResponseLiveData
 
     private var countryCode : String = "us"
     private var category : String = "business"
@@ -30,6 +33,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     init {
         getTopheadlines()
         getTopheadlinesOfTopic()
+        getSearchNews()
     }
 
     fun getTopheadlines(){
@@ -48,13 +52,21 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
         }
     }
 
+    fun getSearchNews(query : String="bitcoin"){
+        viewModelScope.launch(Dispatchers.IO) {
+            _newsSearchResponseLiveData.postValue(ResponseHandler.Loading())
+            val response = repository.getSearchNews(query = query, API_KEY)
+            _newsSearchResponseLiveData.postValue(handleResponse(response))
+        }
+    }
+
     private fun handleResponse(response : Response<NewsResponse>) : ResponseHandler<NewsResponse> {
         if(response.isSuccessful){
             response.body()?.let {
                 return ResponseHandler.Success(it)
             }
         }
-        return ResponseHandler.Error(response.message())
+        return ResponseHandler.Error(response.body()?.status)
     }
 
     fun updateCountryCode(code:String){

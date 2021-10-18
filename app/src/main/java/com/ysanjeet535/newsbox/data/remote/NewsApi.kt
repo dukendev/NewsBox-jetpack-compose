@@ -22,5 +22,11 @@ interface NewsApi {
         @Query("apiKey") key : String
     ) : Response<NewsResponse>
 
+    @GET("everything")
+    suspend fun getSearchNews(
+        @Query("q") query : String,
+        @Query("apiKey") key : String
+    ) : Response<NewsResponse>
+
 
 }

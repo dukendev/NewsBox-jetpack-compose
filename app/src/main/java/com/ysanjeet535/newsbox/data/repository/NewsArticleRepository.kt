@@ -15,6 +15,8 @@ class NewsArticleRepository @Inject constructor (private val newsApi : NewsApi) 
     suspend fun getTopHeadlinesOfTopic(country:String,category : String,apiKey :String) =
         newsApi.getTopheadlinesOfTopic(country,category,apiKey)
 
+    suspend fun getSearchNews(query : String,apiKey: String) =
+        newsApi.getSearchNews(query = query,key = apiKey)
 }
 
 
