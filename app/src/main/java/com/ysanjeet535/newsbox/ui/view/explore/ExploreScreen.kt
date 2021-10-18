@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
+import com.ysanjeet535.newsbox.ui.view.common.CompactLoadingCards
 import com.ysanjeet535.newsbox.ui.view.common.CompactNewsCard
 import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
 import com.ysanjeet535.newsbox.utils.ResponseHandler
@@ -86,7 +87,7 @@ fun ExploreScreenContent(mainViewModel: MainViewModel,state: SearchState = remem
                         Text(text = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
                     }
                     is ResponseHandler.Loading -> {
-                        LoadingCards()
+                        CompactLoadingCards()
                     }
                 }
 

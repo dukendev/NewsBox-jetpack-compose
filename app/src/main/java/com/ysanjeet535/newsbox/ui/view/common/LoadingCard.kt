@@ -4,12 +4,14 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -24,16 +26,31 @@ fun LoadingCards(){
     LazyRow(modifier = Modifier.background(Color.White)){
         repeat(10){
             item {
-                ShimmerBox()
+                ShimmerBox {
+                    ShimmerBoxContent(brush = it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CompactLoadingCards(){
+    LazyColumn(modifier = Modifier.background(Color.White)){
+        repeat(10){
+            item {
+                ShimmerBox {
+                    CompactShimmerBoxContent(brush = it)
+                }
             }
         }
     }
 }
 
 
-@Preview
+
 @Composable
-fun ShimmerBox(modifier: Modifier = Modifier){
+fun ShimmerBox(modifier: Modifier = Modifier,content:@Composable() (brush:Brush)->Unit){
     val colors = listOf(Color.DarkGray, Color.LightGray, Color.DarkGray)
     val infiniteTransition = rememberInfiniteTransition()
     val brushTranslateAnimation by infiniteTransition.animateFloat(
@@ -50,8 +67,43 @@ fun ShimmerBox(modifier: Modifier = Modifier){
         end = Offset(brushTranslateAnimation,brushTranslateAnimation)
     )
 
-    ShimmerBoxContent(brush = brush)
+    content(brush)
+}
 
+@Preview
+@Composable
+fun CompactShimmerBoxContent(brush: Brush = Brush.linearGradient(listOf(Color.Red,Color.Green))){
+    Row(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .height(100.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier
+            .size(100.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(brush)
+        )
+        Column {
+            Spacer(modifier = Modifier
+                .padding(8.dp)
+                .height(16.dp)
+                .width(200.dp)
+                .background(brush)
+            )
+
+            Spacer(modifier = Modifier
+                .padding(8.dp)
+                .height(16.dp)
+                .width(200.dp)
+                .background(brush)
+            )
+        }
+
+    }
 }
 
 @Preview

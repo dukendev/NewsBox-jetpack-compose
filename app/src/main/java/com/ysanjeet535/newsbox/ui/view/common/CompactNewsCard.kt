@@ -42,11 +42,11 @@ fun CompactNewsCard(article: Article = Article.mock()){
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
-                    text = article.title!!,
+                    text = article.title?: "Not Available",
                     style = MaterialTheme.typography.h3
                 )
                 Text(
-                    text = article.description!!,
+                    text = article.description?: "Not Available",
                     style = MaterialTheme.typography.body1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
