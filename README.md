@@ -1,4 +1,4 @@
 # NewsBox-jetpack-compose
 ## Jetpack compose app 
 
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/87947328/137799073-06375aa5-04f6-4ab7-9d49-d7f976a8f7c9.mp4)
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
