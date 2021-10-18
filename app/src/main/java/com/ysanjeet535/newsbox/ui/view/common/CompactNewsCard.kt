@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,13 +39,16 @@ fun CompactNewsCard(article: Article = Article.mock()){
             Image(
                 painter = rememberImagePainter(data = article.urlToImage),
                 contentDescription = null,
-                modifier = Modifier.padding(8.dp).clip(RoundedCornerShape(8.dp))
+                modifier = Modifier.padding(8.dp).clip(RoundedCornerShape(8.dp)).aspectRatio(1f),
+                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = article.title?: "Not Available",
-                    style = MaterialTheme.typography.h3
+                    style = MaterialTheme.typography.h3,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = article.description?: "Not Available",

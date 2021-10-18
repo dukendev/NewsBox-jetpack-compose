@@ -30,22 +30,27 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
 import com.ysanjeet535.newsbox.ui.view.common.CompactLoadingCards
 import com.ysanjeet535.newsbox.ui.view.common.CompactNewsCard
+import com.ysanjeet535.newsbox.ui.view.common.ExpandableNewsCard
 import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
 import com.ysanjeet535.newsbox.utils.ResponseHandler
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 import kotlinx.coroutines.delay
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun ExploreScreenContent(mainViewModel: MainViewModel,state: SearchState = rememberSearchState(),modifier: Modifier = Modifier){
+fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainViewModel: MainViewModel, state: SearchState = rememberSearchState()){
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .padding(bottom = paddingValues)
+            .fillMaxSize()
     ) {
 
         SearchBar(
@@ -71,7 +76,7 @@ fun ExploreScreenContent(mainViewModel: MainViewModel,state: SearchState = remem
 
         when (state.searchDisplay) {
             SearchDisplay.InitialResults -> {
-                Text(text = "Search what you require")
+                InitialState("Please enter your query above ...")
             }
             SearchDisplay.Results -> {
                 when(searchResponse){
@@ -80,11 +85,13 @@ fun ExploreScreenContent(mainViewModel: MainViewModel,state: SearchState = remem
                         LazyColumn{
                             items(searchList){
                                 CompactNewsCard(article = it)
+                                //ExpandableNewsCard(article = it)
                             }
                         }
                     }
                     is ResponseHandler.Error -> {
-                        Text(text = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
+                        //Text(text = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
+                        InitialState(string = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
                     }
                     is ResponseHandler.Loading -> {
                         CompactLoadingCards()
