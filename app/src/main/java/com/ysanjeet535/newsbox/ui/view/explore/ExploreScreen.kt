@@ -84,14 +84,14 @@ fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainV
                         val searchList = (searchResponse as ResponseHandler.Success<NewsResponse>).data!!.articles
                         LazyColumn{
                             items(searchList){
-                                CompactNewsCard(article = it)
-                                //ExpandableNewsCard(article = it)
+                                //CompactNewsCard(article = it)
+                                ExpandableNewsCard(article = it)
                             }
                         }
                     }
                     is ResponseHandler.Error -> {
                         //Text(text = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
-                        InitialState(string = (searchResponse as ResponseHandler.Error<NewsResponse>).message.toString())
+                        InitialState(string = "Error of type :${(searchResponse as ResponseHandler.Error<NewsResponse>).message.toString()} has happened")
                     }
                     is ResponseHandler.Loading -> {
                         CompactLoadingCards()

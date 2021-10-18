@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ysanjeet535.newsbox.BuildConfig
 import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
 import com.ysanjeet535.newsbox.utils.Constants.API_KEY
+import com.ysanjeet535.newsbox.utils.Constants.API_KEY2
 import com.ysanjeet535.newsbox.utils.ResponseHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +32,8 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     private var countryCode : String = "us"
     private var category : String = "business"
 
+    private var apiKeyForUse = API_KEY2
+
     init {
         getTopheadlines()
         getTopheadlinesOfTopic()
@@ -39,7 +43,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     fun getTopheadlines(){
         viewModelScope.launch(Dispatchers.IO) {
             _newsResponseLiveData.postValue(ResponseHandler.Loading())
-            val response = repository.getTopHeadlines(countryCode, API_KEY)
+            val response = repository.getTopHeadlines(countryCode, apiKeyForUse)
             _newsResponseLiveData.postValue(handleResponse(response))
         }
     }
@@ -47,7 +51,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     fun getTopheadlinesOfTopic(){
         viewModelScope.launch(Dispatchers.IO) {
             _newsTopicResponseLiveData.postValue(ResponseHandler.Loading())
-            val response = repository.getTopHeadlinesOfTopic(countryCode,category ,API_KEY)
+            val response = repository.getTopHeadlinesOfTopic(countryCode,category ,apiKeyForUse)
             _newsTopicResponseLiveData.postValue(handleResponse(response))
         }
     }
@@ -55,7 +59,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     fun getSearchNews(query : String="bitcoin"){
         viewModelScope.launch(Dispatchers.IO) {
             _newsSearchResponseLiveData.postValue(ResponseHandler.Loading())
-            val response = repository.getSearchNews(query = query, API_KEY)
+            val response = repository.getSearchNews(query = query, apiKeyForUse)
             _newsSearchResponseLiveData.postValue(handleResponse(response))
         }
     }
