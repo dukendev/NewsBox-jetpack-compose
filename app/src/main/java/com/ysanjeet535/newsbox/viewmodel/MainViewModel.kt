@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     private var countryCode : String = "us"
     private var category : String = "business"
 
-    private var apiKeyForUse = API_KEY2
+    private var apiKeyForUse = API_KEY
 
     init {
         getTopheadlines()

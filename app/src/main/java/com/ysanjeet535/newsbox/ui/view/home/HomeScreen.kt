@@ -36,6 +36,7 @@ import com.ysanjeet535.newsbox.ui.theme.GreenBoxDark
 import com.ysanjeet535.newsbox.ui.theme.GreenBoxMedium
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
+import com.ysanjeet535.newsbox.ui.view.common.CardButtons
 import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
 import com.ysanjeet535.newsbox.utils.ResponseHandler
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
@@ -265,8 +266,8 @@ fun NewsItemCard(newsItem: Article){
                     topStart = 0.dp,
                     bottomEnd = 0.dp
                 )
-            )
-            .clickable { uriHandler.openUri(newsItem.url) },
+            ),
+//            .clickable { uriHandler.openUri(newsItem.url) },
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.background
     ) {
@@ -325,7 +326,9 @@ fun NewsItemCard(newsItem: Article){
                     fontStyle = FontStyle.Italic
                 )
             }
-
+            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {
+                //save to database operation here
+            })
         }
     }
 }
