@@ -2,6 +2,7 @@ package com.ysanjeet535.newsbox.data.remote.dto
 
 import com.ysanjeet535.newsbox.data.model.NewsItem
 import com.ysanjeet535.newsbox.data.model.Source
+import kotlin.random.Random
 
 data class Article(
     val author: String?,
@@ -16,6 +17,7 @@ data class Article(
     companion object{
         fun Article.mapToNewsItem(article: Article) : NewsItem {
             return NewsItem(
+                id = Random(45).nextLong(),
                 author = article.author!!,
                 content = article.content!!,
                 description = article.description!!,

@@ -24,6 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.ysanjeet535.newsbox.data.db.NewsItemDatabase
+import com.ysanjeet535.newsbox.data.model.NewsItem
+import com.ysanjeet535.newsbox.data.model.Source
 import com.ysanjeet535.newsbox.data.remote.NewsApi
 import com.ysanjeet535.newsbox.data.remote.RetrofitHelper
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
@@ -41,16 +44,30 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
-    @SuppressLint("UnrememberedMutableState")
+    @SuppressLint("UnrememberedMutableState", "CoroutineCreationDuringComposition")
     @ExperimentalFoundationApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val db = NewsItemDatabase.getDatabase(this)
         val mainViewModel by viewModels<MainViewModel>()
         setContent{
             val navController = rememberNavController()
             val currentScreen = mutableStateOf<Screens>(Screens.Home)
+            GlobalScope.launch {
+                db.newsItemDao().insertNewsItem(NewsItem(
+                    1,
+                    "barney",
+                    "no content",
+                    "desp",
+                    "334343s",
+                    Source("3", "4"),
+                    "gsgs",
+                    "sfs",
+                    "fsfs"
+                ))
+            }
             
             NewsBoxTheme {
                 // A surface container using the 'background' color from the theme
