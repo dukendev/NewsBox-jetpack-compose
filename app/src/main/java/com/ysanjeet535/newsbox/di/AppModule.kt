@@ -1,7 +1,10 @@
 package com.ysanjeet535.newsbox.di
 
 import android.content.Context
+import androidx.room.Room
 import com.ysanjeet535.newsbox.App
+import com.ysanjeet535.newsbox.data.db.NewsItemDao
+import com.ysanjeet535.newsbox.data.db.NewsItemDatabase
 import com.ysanjeet535.newsbox.data.remote.NewsApi
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
 import com.ysanjeet535.newsbox.utils.Constants.BASE_URL
@@ -30,8 +33,23 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRepository(newsApi: NewsApi) : NewsArticleRepository{
-        return NewsArticleRepository(newsApi = newsApi)
+    fun provideDatabase(@ApplicationContext context: Context) : NewsItemDatabase {
+        return Room.databaseBuilder(context.applicationContext,
+            NewsItemDatabase::class.java,
+            "newsItemDB"
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDao(newsItemDatabase: NewsItemDatabase) : NewsItemDao {
+        return newsItemDatabase.newsItemDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepository(newsApi: NewsApi,newsItemDao: NewsItemDao) : NewsArticleRepository{
+        return NewsArticleRepository(newsApi = newsApi,newsItemDao = newsItemDao)
     }
 
     @Singleton

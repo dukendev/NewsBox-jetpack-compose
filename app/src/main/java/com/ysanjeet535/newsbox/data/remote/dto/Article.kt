@@ -12,20 +12,19 @@ data class Article(
     val source: Source?,
     val title: String?,
     val url: String,
-    val urlToImage: String
+    val urlToImage: String?
 ){
     companion object{
         fun Article.mapToNewsItem(article: Article) : NewsItem {
             return NewsItem(
-                id = Random(45).nextLong(),
-                author = article.author!!,
-                content = article.content!!,
-                description = article.description!!,
-                publishedAt = article.publishedAt!!,
-                source = article.source!!,
-                title = article.title!!,
+                author = article.author?:"Not available",
+                content = article.content?:"Not available",
+                description = article.description?:"Not available",
+                publishedAt = article.publishedAt?:"Not available",
+                source = article.source?.let { Source(it.id?:"Not Available",it.name?:"Not available") },
+                title = article.title?:"Not available",
                 url = article.url,
-                urlToImage = article.urlToImage
+                urlToImage = article.urlToImage?:"https://i.pinimg.com/564x/13/9a/19/139a190b930b8efdecfdd5445cae7754.jpg"
             )
         }
 

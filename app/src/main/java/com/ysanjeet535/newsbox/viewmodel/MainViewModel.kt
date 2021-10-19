@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ysanjeet535.newsbox.BuildConfig
+import com.ysanjeet535.newsbox.data.model.NewsItem
 import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
 import com.ysanjeet535.newsbox.data.repository.NewsArticleRepository
@@ -24,10 +25,14 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     private val _newsResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
     private val _newsTopicResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
     private val _newsSearchResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
+    //database
+    private val _newsItemsLiveData = MutableLiveData<List<NewsItem>>()
+
 
     val newsResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsResponseLiveData
     val newsTopicResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsTopicResponseLiveData
     val newsSearchResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsSearchResponseLiveData
+    val newsItemsLiveData : LiveData<List<NewsItem>> get() = _newsItemsLiveData
 
     private var countryCode : String = "us"
     private var category : String = "business"
@@ -83,4 +88,27 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
         Log.d("VIEWMODEL",category)
     }
 
+    //database
+    fun insertNewsItem(newsItem: NewsItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertNewsItem(newsItem)
+        }
+    }
+
+    fun deleteNewsItem(newsItem: NewsItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteNewsItem(newsItem)
+        }
+    }
+
+    fun deleteAllNews(){
+        viewModelScope.launch (Dispatchers.IO){
+            repository.deleteAllNews()
+        }
+    }
+
+    fun getAllNewsItem() {
+        val newsItems = repository.getAllNewsItem().value
+        _newsItemsLiveData.postValue(newsItems?: emptyList())
+    }
 }

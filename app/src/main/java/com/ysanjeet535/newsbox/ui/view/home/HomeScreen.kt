@@ -1,6 +1,7 @@
 package com.ysanjeet535.newsbox.ui.view.home
 
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ysanjeet535.newsbox.R
 import com.ysanjeet535.newsbox.data.remote.dto.Article
+import com.ysanjeet535.newsbox.data.remote.dto.Article.Companion.mapToNewsItem
 import com.ysanjeet535.newsbox.ui.theme.GreenBoxDark
 import com.ysanjeet535.newsbox.ui.theme.GreenBoxMedium
 import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
@@ -49,8 +51,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 
     val scrollState = rememberScrollState()
     val topHeadlines by mainViewModel.newsResponseLiveData.observeAsState()
-
-
+    val context = LocalContext.current
 
     Column(modifier = Modifier
         .padding(bottom = paddingValues)
@@ -69,7 +70,10 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
                 val articles = topHeadlines?.data!!.articles
                 LazyRow{
                     items(articles.size){
-                        NewsItemCard(newsItem = articles[it])
+                        NewsItemCard(newsItem = articles[it]){
+                            mainViewModel.insertNewsItem(articles[it].mapToNewsItem(articles[it]))
+                            Toast.makeText(context,"News added in read later Successfully!!",Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
@@ -123,6 +127,7 @@ fun HeadingText(heading : String,modifier: Modifier = Modifier){
 
 @Composable
 fun TopicRow(mainViewModel: MainViewModel){
+    val context = LocalContext.current
     val topic = listOf("business","entertainment","general","health","science","sports","technology")
     var topicIndexSelected by remember { mutableStateOf(0)}
 
@@ -156,7 +161,10 @@ fun TopicRow(mainViewModel: MainViewModel){
                 LazyRow {
 
                     items(list.size) {
-                        NewsItemCard(newsItem = list[it])
+                        NewsItemCard(newsItem = list[it]){
+                            mainViewModel.insertNewsItem(list[it].mapToNewsItem(list[it]))
+                            Toast.makeText(context,"News added in read later Successfully!!",Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
@@ -247,7 +255,7 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelecte
 
 
 @Composable
-fun NewsItemCard(newsItem: Article){
+fun NewsItemCard(newsItem: Article,onSaveLater : ()->Unit={}){
     //for web url
 //    val context = LocalContext.current
 //    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
@@ -274,7 +282,7 @@ fun NewsItemCard(newsItem: Article){
         Column {
             Image(
                 painter = rememberImagePainter(data = newsItem.urlToImage){
-                      error(R.drawable.ic_launcher_background)
+                      error(R.drawable.ic_error)
                 },
                 contentDescription = null,
                 modifier = Modifier
@@ -301,7 +309,7 @@ fun NewsItemCard(newsItem: Article){
             )
             var sourceName = "Not available"
             newsItem.source?.let {
-                sourceName = it.name
+                sourceName = it.name?:"Not available"
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -326,9 +334,7 @@ fun NewsItemCard(newsItem: Article){
                     fontStyle = FontStyle.Italic
                 )
             }
-            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {
-                //save to database operation here
-            })
+            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {onSaveLater()})
         }
     }
 }

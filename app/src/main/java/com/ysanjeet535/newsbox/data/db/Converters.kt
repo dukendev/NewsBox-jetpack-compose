@@ -6,7 +6,9 @@ import com.ysanjeet535.newsbox.data.model.Source
 class Converters {
     @TypeConverter
     fun fromSourceToString(source: Source) : String{
-        return "${source.id}#${source.name}"
+        val id = source.id?:"Not available"
+        val name = source.name?:"Not available"
+        return "${id}#${name}"
     }
 
     @TypeConverter

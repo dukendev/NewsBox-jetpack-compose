@@ -50,25 +50,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = NewsItemDatabase.getDatabase(this)
         val mainViewModel by viewModels<MainViewModel>()
         setContent{
             val navController = rememberNavController()
             val currentScreen = mutableStateOf<Screens>(Screens.Home)
-            GlobalScope.launch {
-                db.newsItemDao().insertNewsItem(NewsItem(
-                    1,
-                    "barney",
-                    "no content",
-                    "desp",
-                    "334343s",
-                    Source("3", "4"),
-                    "gsgs",
-                    "sfs",
-                    "fsfs"
-                ))
-            }
-            
+            //TODO : delete this after testing
+            mainViewModel.deleteAllNews()
             NewsBoxTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {

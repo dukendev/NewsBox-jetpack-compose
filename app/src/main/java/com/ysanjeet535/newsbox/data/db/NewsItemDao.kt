@@ -13,6 +13,10 @@ interface NewsItemDao {
     @Delete
     suspend fun deleteNewsItem(newsItem: NewsItem)
 
+    @Query("DELETE FROM newsitem")
+    suspend fun deleteAllNews()
+
+
     @Query("SELECT * FROM newsitem")
     fun getAllNewsItem() : LiveData<List<NewsItem>>
 
