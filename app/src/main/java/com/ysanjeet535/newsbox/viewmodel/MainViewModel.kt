@@ -25,14 +25,14 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     private val _newsResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
     private val _newsTopicResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
     private val _newsSearchResponseLiveData = MutableLiveData<ResponseHandler<NewsResponse>>()
-    //database
-    private val _newsItemsLiveData = MutableLiveData<List<NewsItem>>()
+
 
 
     val newsResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsResponseLiveData
     val newsTopicResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsTopicResponseLiveData
     val newsSearchResponseLiveData : LiveData<ResponseHandler<NewsResponse>> get() = _newsSearchResponseLiveData
-    val newsItemsLiveData : LiveData<List<NewsItem>> get() = _newsItemsLiveData
+
+    var  newsItemsLiveData : LiveData<List<NewsItem>>
 
     private var countryCode : String = "us"
     private var category : String = "business"
@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
     init {
         getTopheadlines()
         getTopheadlinesOfTopic()
-        getSearchNews()
+        newsItemsLiveData = repository.getAllNewsItem()
     }
 
     fun getTopheadlines(){
@@ -107,8 +107,7 @@ class MainViewModel @Inject constructor(private val repository: NewsArticleRepos
         }
     }
 
-    fun getAllNewsItem() {
-        val newsItems = repository.getAllNewsItem().value
-        _newsItemsLiveData.postValue(newsItems?: emptyList())
+    fun getAllNewsItem(): LiveData<List<NewsItem>> {
+        return newsItemsLiveData
     }
 }

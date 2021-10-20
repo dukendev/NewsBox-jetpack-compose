@@ -12,6 +12,8 @@ class NewsArticleRepository @Inject constructor(
     private val newsApi: NewsApi,
     private val newsItemDao: NewsItemDao
 ) {
+
+    private lateinit var allNews : LiveData<List<NewsItem>>
     //remote
     suspend fun getTopHeadlines(country:String,apiKey :String) =
         newsApi.getTopheadlines(country,apiKey)
@@ -36,8 +38,13 @@ class NewsArticleRepository @Inject constructor(
         newsItemDao.deleteAllNews()
     }
 
-    fun getAllNewsItem() =
-        newsItemDao.getAllNewsItem()
+    init {
+        allNews = newsItemDao.getAllNewsItem()
+    }
+
+    fun getAllNewsItem(): LiveData<List<NewsItem>> {
+        return allNews
+    }
 
 }
 

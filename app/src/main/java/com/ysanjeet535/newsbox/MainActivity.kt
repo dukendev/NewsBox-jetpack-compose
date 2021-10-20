@@ -54,8 +54,7 @@ class MainActivity : ComponentActivity() {
         setContent{
             val navController = rememberNavController()
             val currentScreen = mutableStateOf<Screens>(Screens.Home)
-            //TODO : delete this after testing
-            mainViewModel.deleteAllNews()
+
             NewsBoxTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
