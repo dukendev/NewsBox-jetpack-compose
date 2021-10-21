@@ -87,7 +87,11 @@ fun ProfileScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
         if(savedItems !=null){
             LazyColumn{
                 items(savedItems!!){ item->
-                    CompactNewsCard(article = item.mapToArticle(item))
+                    //CompactNewsCard(article = item.mapToArticle(item))
+                    ExpandableNewsCard(article = item.mapToArticle(item),isOnProfileScreen = true){
+                        mainViewModel.deleteNewsItem(item)
+                    }
+
                 }
             }
         } else {
@@ -131,7 +135,7 @@ fun ProfileHeader(int: Int=0){
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(100.dp)
+                .size(200.dp)
                 .clip(CircleShape)
                 .border(2.dp, RedBoxDark, CircleShape)
 

@@ -70,7 +70,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
                 val articles = topHeadlines?.data!!.articles
                 LazyRow{
                     items(articles.size){
-                        NewsItemCard(newsItem = articles[it]){
+                        NewsItemCard(newsItem = articles[it],isOnProfileScreen = false){
                             mainViewModel.insertNewsItem(articles[it].mapToNewsItem(articles[it]))
                             Toast.makeText(context,"News added in read later Successfully!!",Toast.LENGTH_LONG).show()
                         }
@@ -161,7 +161,7 @@ fun TopicRow(mainViewModel: MainViewModel){
                 LazyRow {
 
                     items(list.size) {
-                        NewsItemCard(newsItem = list[it]){
+                        NewsItemCard(newsItem = list[it],isOnProfileScreen = false){
                             mainViewModel.insertNewsItem(list[it].mapToNewsItem(list[it]))
                             Toast.makeText(context,"News added in read later Successfully!!",Toast.LENGTH_LONG).show()
                         }
@@ -255,7 +255,7 @@ fun TopicCardItem(topic : String="Hello",aspectRatio : Float = 1f,isTopicSelecte
 
 
 @Composable
-fun NewsItemCard(newsItem: Article,onSaveLater : ()->Unit={}){
+fun NewsItemCard(newsItem: Article,isOnProfileScreen:Boolean,onDelete : ()-> Unit = {},onSaveLater : ()->Unit={}){
     //for web url
 //    val context = LocalContext.current
 //    val webIntent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(newsItem.url)) }
@@ -266,7 +266,7 @@ fun NewsItemCard(newsItem: Article,onSaveLater : ()->Unit={}){
         modifier = Modifier
             .padding(16.dp)
             .width(300.dp)
-            .height(500.dp)
+            .height(550.dp)
             .clip(
                 RoundedCornerShape(
                     topEnd = 25.dp,
@@ -334,7 +334,7 @@ fun NewsItemCard(newsItem: Article,onSaveLater : ()->Unit={}){
                     fontStyle = FontStyle.Italic
                 )
             }
-            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {onSaveLater()})
+            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {onSaveLater()},isOnProfileScreen = isOnProfileScreen,onDelete = onDelete)
         }
     }
 }

@@ -14,7 +14,7 @@ import com.ysanjeet535.newsbox.ui.view.home.NewsItemCard
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
-fun ExpandableNewsCard(article: Article = Article.mock()){
+fun ExpandableNewsCard(article: Article = Article.mock(),isOnProfileScreen:Boolean = false,onSaveLater : ()->Unit={},onDelete : ()-> Unit = {}){
     var isExpanded by remember { mutableStateOf(false)}
     Surface(
         color = MaterialTheme.colors.background,
@@ -44,7 +44,7 @@ fun ExpandableNewsCard(article: Article = Article.mock()){
 
         ) { targetExpanded->
             if(targetExpanded){
-                NewsItemCard(newsItem = article)
+                NewsItemCard(newsItem = article,isOnProfileScreen = isOnProfileScreen,onDelete = onDelete,onSaveLater = onSaveLater)
             } else{
                 CompactNewsCard(article = article)
             }

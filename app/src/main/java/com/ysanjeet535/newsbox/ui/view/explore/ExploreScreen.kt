@@ -1,6 +1,7 @@
 package com.ysanjeet535.newsbox.ui.view.explore
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColor
@@ -26,6 +27,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
@@ -33,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ysanjeet535.newsbox.data.remote.dto.Article
+import com.ysanjeet535.newsbox.data.remote.dto.Article.Companion.mapToNewsItem
 import com.ysanjeet535.newsbox.data.remote.dto.NewsResponse
 import com.ysanjeet535.newsbox.ui.view.common.CompactLoadingCards
 import com.ysanjeet535.newsbox.ui.view.common.CompactNewsCard
@@ -41,12 +44,14 @@ import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
 import com.ysanjeet535.newsbox.utils.ResponseHandler
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
 fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainViewModel: MainViewModel, state: SearchState = rememberSearchState()){
 
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .padding(bottom = paddingValues)
@@ -85,7 +90,10 @@ fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainV
                         LazyColumn{
                             items(searchList){
                                 //CompactNewsCard(article = it)
-                                ExpandableNewsCard(article = it)
+                                ExpandableNewsCard(article = it,onSaveLater = {
+                                    mainViewModel.insertNewsItem(it.mapToNewsItem(it))
+                                    Toast.makeText(context,"Added Successfully",Toast.LENGTH_SHORT).show()
+                                })
                             }
                         }
                     }

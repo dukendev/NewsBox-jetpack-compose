@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
@@ -19,7 +20,9 @@ import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 @Composable
 fun CardButtons(
     onSaveLater : ()-> Unit = {},
-    onOpen : ()-> Unit = {}
+    onOpen : ()-> Unit = {},
+    isOnProfileScreen:Boolean = false,
+    onDelete : ()-> Unit = {}
 ){
     Row(modifier = Modifier
         .padding(16.dp)
@@ -28,18 +31,37 @@ fun CardButtons(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Button(
-            onClick = { onSaveLater() },
-            modifier = Modifier
-                .padding(8.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .weight(1f)
-        ) {
-            Row {
-                Text(text = "Read Later",style = MaterialTheme.typography.body1)
-                Icon(Icons.Default.List, contentDescription = null)
+        if (isOnProfileScreen){
+            Button(
+                onClick = {
+                          //onDelete will come here
+                          onDelete()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .weight(1f)
+            ) {
+                Row {
+                    Text(text = "Remove",style = MaterialTheme.typography.body1)
+                    Icon(Icons.Default.Delete, contentDescription = null)
+                }
+            }
+        }else{
+            Button(
+                onClick = { onSaveLater() },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .weight(1f)
+            ) {
+                Row {
+                    Text(text = "Read Later",style = MaterialTheme.typography.body1)
+                    Icon(Icons.Default.List, contentDescription = null)
+                }
             }
         }
+
         Button(
             onClick = { onOpen() },
             modifier = Modifier
