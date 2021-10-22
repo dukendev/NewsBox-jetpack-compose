@@ -4,7 +4,7 @@ This is a simple news app which uses newapi.org api to showcase news in very use
 
 Check out the Demo below :
 
-[![NewsBox](https://img.shields.io/badge/NewsBox🌈-APK-black.svg?style=for-the-badge&logo=android)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
+[![NewsBox](https://img.shields.io/badge/NewsBox🌈-APK-black.svg?style=for-the-badge&logo=android)](https://github.com/sanjeet131/NewsBox-jetpack-compose/releases/NewsBox-v1_0_0.apk)
 
 ### Preview
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
