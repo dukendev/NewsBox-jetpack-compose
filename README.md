@@ -3,6 +3,7 @@
 This is a simple news app which uses newapi.org api to showcase news in very user friendly manner. It is made complete using 100% kotlin using android new declarative UI framework [Jetpack Compose][compose]. This app follow google recommended archietechture for android app MVVM and has single activity model. 
 
 Check out the Demo below :
+
 [![NewsBox](https://img.shields.io/badge/NewsBox🌈-APK-black.svg?style=for-the-badge&logo=android)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
 
 ### Preview
