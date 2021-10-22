@@ -1,6 +1,6 @@
 # NewsBox-jetpack-compose
 ## Jetpack compose app 
-This is a simple news app which uses newapi.org api to showcase news in very user friendly manner.
+This is a simple news app which uses newapi.org api to showcase news in very user friendly manner. It is made complete using 100% kotlin using android new declarative UI framework [Jetpack Compose][compose]. This app follow google recommended archietechture for android app MVVM and has single activity model. 
 
 ### Preview
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
@@ -26,3 +26,7 @@ This is a simple news app which uses newapi.org api to showcase news in very use
 
 ### Coroutines
 #### A coroutine is a concurrency design pattern that you can use on Android to simplify code that executes asynchronously.
+
+
+[compose]: https://developer.android.com/jetpack/compose
+[coil]: https://coil-kt.github.io/coil/compose
