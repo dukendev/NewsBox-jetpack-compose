@@ -97,4 +97,7 @@ dependencies {
     //for status bar control
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
+    //accompanist-glide
+    implementation "com.google.accompanist:accompanist-glide:0.10.0"
+
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.glide.rememberGlidePainter
 import com.ysanjeet535.newsbox.R
 
 @Preview
@@ -23,10 +24,12 @@ import com.ysanjeet535.newsbox.R
 fun NoInternetBox(){
     Column {
         Box(modifier = Modifier.size(400.dp)) {
+
+
             Image(
-                painter = painterResource(id = R.drawable.ic_no_internet),
-                contentDescription = "No internet",
-                modifier = Modifier.background(Color.Transparent),
+                painter = rememberGlidePainter(request = R.raw.ic_no_connection),
+                contentDescription = "No Internet",
+                modifier = Modifier.background(Color.Transparent).fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
 

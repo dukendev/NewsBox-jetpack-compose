@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.glide.rememberGlidePainter
 import com.ysanjeet535.newsbox.R
 
 @Composable
@@ -31,9 +32,11 @@ fun InitialState(string: String){
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_explore_news),
+                painter = rememberGlidePainter(request = R.drawable.ic_explore_news),
                 contentDescription = "explore",
-                modifier = Modifier.background(Color.Transparent).size(150.dp),
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .size(200.dp),
                 contentScale = ContentScale.FillBounds
             )
             Text(text = string)

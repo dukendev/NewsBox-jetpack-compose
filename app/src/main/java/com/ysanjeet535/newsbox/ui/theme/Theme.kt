@@ -39,7 +39,7 @@ private val LightColorPalette = lightColors(
 fun NewsBoxTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(RedBoxMedium)
+    systemUiController.setStatusBarColor(RedBoxDark)
 
     val colors = if (darkTheme) {
         DarkColorPalette

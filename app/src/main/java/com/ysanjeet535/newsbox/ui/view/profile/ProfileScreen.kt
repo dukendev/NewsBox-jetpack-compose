@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.google.accompanist.glide.rememberGlidePainter
 import com.ysanjeet535.newsbox.R
 import com.ysanjeet535.newsbox.data.model.NewsItem.Companion.mapToArticle
 import com.ysanjeet535.newsbox.data.remote.dto.Article
@@ -132,14 +133,14 @@ fun ProfileHeader(int: Int=0){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_saved_news),
+            painter = rememberGlidePainter(request = R.drawable.ic_saved_news),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(200.dp)
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier.fillMaxWidth(),verticalAlignment = Alignment.CenterVertically,horizontalArrangement = Arrangement.Center) {
            Text(text = "You have $int saved news items",style = MaterialTheme.typography.h3)
         }
     }
