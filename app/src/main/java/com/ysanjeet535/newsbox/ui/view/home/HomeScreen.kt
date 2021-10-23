@@ -82,6 +82,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
                 LoadingCards()
             }
             is ResponseHandler.Error -> {
+                NoInternetBox()
                 Toast.makeText(LocalContext.current,"${topHeadlines?.message}",Toast.LENGTH_LONG).show()
             }
         }
@@ -173,7 +174,8 @@ fun TopicRow(mainViewModel: MainViewModel){
                 LoadingCards()
             }
             is ResponseHandler.Error -> {
-                Toast.makeText(LocalContext.current,"${topicHeadlines?.message}",Toast.LENGTH_LONG).show()
+                NoInternetBox()
+                //Toast.makeText(LocalContext.current,"${topicHeadlines?.message}",Toast.LENGTH_LONG).show()
             }
         }
 
