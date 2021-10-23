@@ -41,7 +41,10 @@ import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 import com.ysanjeet535.newsbox.ui.view.common.CardButtons
 import com.ysanjeet535.newsbox.ui.view.common.LoadingCards
 import com.ysanjeet535.newsbox.utils.ResponseHandler
+import com.ysanjeet535.newsbox.utils.customToBottom
 import com.ysanjeet535.newsbox.viewmodel.MainViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -49,6 +52,7 @@ import java.util.*
 @Composable
 fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val topHeadlines by mainViewModel.newsResponseLiveData.observeAsState()
     val context = LocalContext.current
@@ -268,8 +272,8 @@ fun NewsItemCard(newsItem: Article,isOnProfileScreen:Boolean,onDelete : ()-> Uni
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .width(300.dp)
-            .height(550.dp)
+            .width(360.dp)
+            .height(540.dp)
             .clip(
                 RoundedCornerShape(
                     topEnd = 25.dp,
@@ -337,7 +341,13 @@ fun NewsItemCard(newsItem: Article,isOnProfileScreen:Boolean,onDelete : ()-> Uni
                     fontStyle = FontStyle.Italic
                 )
             }
-            CardButtons(onOpen = { uriHandler.openUri(newsItem.url) },onSaveLater = {onSaveLater()},isOnProfileScreen = isOnProfileScreen,onDelete = onDelete)
+            CardButtons(
+                onOpen = { uriHandler.openUri(newsItem.url) },
+                onSaveLater = { onSaveLater() },
+                isOnProfileScreen = isOnProfileScreen,
+                onDelete = onDelete,
+                modifier = Modifier.customToBottom()
+            )
         }
     }
 }

@@ -17,7 +17,7 @@ import com.ysanjeet535.newsbox.ui.view.home.NewsItemCard
 fun ExpandableNewsCard(article: Article = Article.mock(),isOnProfileScreen:Boolean = false,onSaveLater : ()->Unit={},onDelete : ()-> Unit = {}){
     var isExpanded by remember { mutableStateOf(false)}
     Surface(
-        color = MaterialTheme.colors.background,
+        color = MaterialTheme.colors.surface,
         onClick = { isExpanded = !isExpanded}
     ) {
         AnimatedContent(

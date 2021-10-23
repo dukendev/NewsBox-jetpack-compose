@@ -56,6 +56,7 @@ fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainV
         modifier = modifier
             .padding(bottom = paddingValues)
             .fillMaxSize()
+
     ) {
 
         SearchBar(
@@ -87,7 +88,7 @@ fun ExploreScreenContent(modifier: Modifier = Modifier, paddingValues: Dp, mainV
                 when(searchResponse){
                     is ResponseHandler.Success -> {
                         val searchList = (searchResponse as ResponseHandler.Success<NewsResponse>).data!!.articles
-                        LazyColumn{
+                        LazyColumn(modifier = Modifier.background(MaterialTheme.colors.surface)){
                             items(searchList){
                                 //CompactNewsCard(article = it)
                                 ExpandableNewsCard(article = it,onSaveLater = {

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ysanjeet535.newsbox.ui.theme.RedBoxDark
 import com.ysanjeet535.newsbox.ui.theme.RedBoxMedium
 
 @Preview
@@ -22,9 +23,10 @@ fun CardButtons(
     onSaveLater : ()-> Unit = {},
     onOpen : ()-> Unit = {},
     isOnProfileScreen:Boolean = false,
-    onDelete : ()-> Unit = {}
+    onDelete : ()-> Unit = {},
+    modifier: Modifier = Modifier
 ){
-    Row(modifier = Modifier
+    Row(modifier = modifier
         .padding(16.dp)
         .fillMaxWidth()
         .background(MaterialTheme.colors.background),
@@ -40,7 +42,8 @@ fun CardButtons(
                 modifier = Modifier
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .weight(1f)
+                    .weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = RedBoxDark)
             ) {
                 Row {
                     Text(text = "Remove",style = MaterialTheme.typography.body1)
@@ -53,7 +56,8 @@ fun CardButtons(
                 modifier = Modifier
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .weight(1f)
+                    .weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = RedBoxDark)
             ) {
                 Row {
                     Text(text = "Read Later",style = MaterialTheme.typography.body1)
@@ -67,7 +71,8 @@ fun CardButtons(
             modifier = Modifier
                 .padding(8.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .weight(1f)
+                .weight(1f),
+            colors = ButtonDefaults.buttonColors(backgroundColor = RedBoxDark)
         ) {
             Row {
                 Text(text = "Open",style = MaterialTheme.typography.body1)

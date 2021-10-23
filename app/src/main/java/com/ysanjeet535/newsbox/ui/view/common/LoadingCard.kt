@@ -113,8 +113,8 @@ fun ShimmerBoxContent(brush: Brush = Brush.linearGradient(listOf(Color.Red,Color
     Column(
         modifier = Modifier
             .padding(16.dp)
-            .width(300.dp)
-            .height(500.dp)
+            .width(360.dp)
+            .height(540.dp)
             .clip(
                 RoundedCornerShape(
                     topEnd = 25.dp,
