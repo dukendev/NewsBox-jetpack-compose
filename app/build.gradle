@@ -94,4 +94,7 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
 
+    //for status bar control
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+
 }
