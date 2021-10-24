@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(private val app : App,private val reposi
     private var countryCode : String = "us"
     private var category : String = "business"
 
-    private var apiKeyForUse = API_KEY
+    private var apiKeyForUse = API_KEY2
 
     init {
         getTopheadlines()

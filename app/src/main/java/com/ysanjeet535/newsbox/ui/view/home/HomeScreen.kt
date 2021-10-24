@@ -52,7 +52,6 @@ import java.util.*
 @Composable
 fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 
-    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val topHeadlines by mainViewModel.newsResponseLiveData.observeAsState()
     val context = LocalContext.current

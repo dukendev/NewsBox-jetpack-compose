@@ -21,10 +21,9 @@ import com.ysanjeet535.newsbox.viewmodel.MainViewModel
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
-fun NavigationComponent(navController: NavController,paddingValues: Dp,mainViewModel: MainViewModel
+fun NavigationComponent(
+    navController: NavController,paddingValues: Dp,mainViewModel: MainViewModel
 ){
-
-
     NavHost(navController = navController as NavHostController, startDestination = Screens.Home.name){
         composable(Screens.Home.name){
             HomeScreenContent(paddingValues = paddingValues,mainViewModel = mainViewModel)

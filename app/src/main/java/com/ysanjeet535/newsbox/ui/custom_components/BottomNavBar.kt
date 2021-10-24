@@ -43,19 +43,19 @@ fun BottomNavBar(currentScreen : String,navController: NavController ,onScreenSe
     ) {
 //        it.name == currentScreen
         screensList.forEach {
-                BottomNavBarItem(
-                    screen = it,
-                    isSelected = it.name == currentScreen
-                ) {
-                    onScreenSelected(it)
-                    if(currentDestination != it.name){
-                        navController.navigate(it.name){
-                            popUpTo(it.name){
-                                inclusive =  true
-                            }
+            BottomNavBarItem(
+                screen = it,
+                isSelected = it.name == currentScreen
+            ) {
+                onScreenSelected(it)
+                if(currentDestination != it.name){
+                    navController.navigate(it.name){
+                        popUpTo(it.name){
+                            inclusive =  true
                         }
                     }
                 }
+            }
         }
 
     }
@@ -89,7 +89,7 @@ fun BottomNavBarItem(screen : Screens, isSelected : Boolean, onScreenSelected : 
             )
 
             AnimatedVisibility(visible = isSelected) {
-               Text(text = screen.name,color = contentColor)
+                Text(text = screen.name,color = contentColor)
             }
 
         }
@@ -97,4 +97,3 @@ fun BottomNavBarItem(screen : Screens, isSelected : Boolean, onScreenSelected : 
 
 
 }
-
