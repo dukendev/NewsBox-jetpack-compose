@@ -7,7 +7,7 @@ Check out the Demo below :
 [![NewsBox](https://img.shields.io/badge/NewsBox🌈-APK-black.svg?style=for-the-badge&logo=android)](https://github.com/sanjeet131/NewsBox-jetpack-compose/releases/download/v1.0.0/NewsBox-v1.apk)
 
 ### Preview
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/87947328/137799316-5f8ff700-a845-47d6-9bff-9bfed3bc1835.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/87947328/138594111-4c4173da-88f0-457c-b22f-2baefb7e1491.gif)
 
 ## Tech Stack Used 
 --------------------------------
