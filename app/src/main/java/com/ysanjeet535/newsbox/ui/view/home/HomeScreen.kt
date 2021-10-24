@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.google.accompanist.glide.rememberGlidePainter
 import com.ysanjeet535.newsbox.R
 import com.ysanjeet535.newsbox.data.remote.dto.Article
 import com.ysanjeet535.newsbox.data.remote.dto.Article.Companion.mapToNewsItem
@@ -64,8 +65,7 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
         .verticalScroll(scrollState, enabled = true),
     ) {
         WelcomeText(
-            username = "Barney",
-            Modifier.padding(16.dp)
+            Modifier.padding(16.dp).size(100.dp).align(Alignment.CenterHorizontally)
         )
         HeadingText(heading = "Top Headlines",Modifier.padding(16.dp))
         CountryCodeDropDown(mainViewModel)
@@ -97,13 +97,14 @@ fun HomeScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
 }
 
 @Composable
-fun WelcomeText(username:String,modifier: Modifier = Modifier){
-    Text(
-        text = "Hello ${username}, Open your NewsBOX!!",
-        style = MaterialTheme.typography.h2,
-        modifier = modifier,
-        color = Color.Black
-    )
+fun WelcomeText(modifier: Modifier = Modifier){
+    Box(modifier = modifier){
+        Image(
+            painter = rememberGlidePainter(request = R.mipmap.ic_launcher),
+            contentDescription = "logo",
+            modifier = Modifier.fillMaxSize().aspectRatio(0.8f)
+        )
+    }
 }
 
 @Composable

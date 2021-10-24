@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -58,7 +59,9 @@ fun ProfileScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
         Box(modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .border(BorderStroke(2.dp, RedBoxDark))){
+            .clip(RoundedCornerShape(10.dp))
+            .border(BorderStroke(2.dp, RedBoxDark), shape = RoundedCornerShape(10.dp))
+        ){
             Text(
                 text = "Your Saved News",
                 style = MaterialTheme.typography.h2,
@@ -77,7 +80,8 @@ fun ProfileScreenContent(paddingValues: Dp,mainViewModel: MainViewModel){
                     .padding(16.dp)
                     .align(
                         Alignment.CenterEnd
-                    )
+                    ),
+                colors = ButtonDefaults.buttonColors(RedBoxDark)
             ) {
                 Icon(
                     Icons.Default.Delete,
