@@ -13,3 +13,5 @@ val RedBoxMedium = Color(0xFFf26a8d)
 
 val GreenBoxDark = Color(0xFF268852)
 val GreenBoxMedium = Color(0xFF18C421)
+
+val PaleWhite = Color(0xFFF9F9F9)
